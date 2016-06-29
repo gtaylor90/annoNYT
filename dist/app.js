@@ -33222,11 +33222,16 @@ function _interopRequireDefault(obj) {
 	return obj && obj.__esModule ? obj : { default: obj };
 }
 
+// Loading in the React DOM
+
 var ArticlesView = _react2.default.createClass({
 	displayName: 'ArticlesView',
-
+	// creating a React component to hold the articles
 	componentWillMount: function componentWillMount() {
 		var _this = this;
+
+		// Life cycle method for calling on the articles
+		// views component
 
 		// 3 context fixes
 
@@ -33249,26 +33254,43 @@ var ArticlesView = _react2.default.createClass({
 		// fat-arrow function. fat-arrow functions are nice to use
 		// as callbacks because they have no "this" context
 		this.props.articleColl.on('sync', function () {
+			/* the data we get back from fetch method
+   from the collection once it succeeds
+   it will broadcase a sync event, which 
+   will trigger the set state event */
+
+			/* when the collection is populated with data, 
+   it will fire a sync event. we attach a callback
+   to that sync event. our callback will invoke the 
+   setState method on the collection, resetting the 
+   "coll" property, which holds the now data-loaded
+   collection. */
 			_this.setState({
-				coll: _this.props.articleColl
+				coll: _this.props.articleColl /* setState causes the component and its children
+                                  to rerender */
 			});
 		});
 	},
 
 	getInitialState: function getInitialState() {
+		/* when the component first mounts this function returns
+  the object that will go on the component's state property */
 		return {
-			coll: this.props.articleColl
+			coll: this.props.articleColl /* we put the collection on the state so that we can update state
+                                and re-render the app when the collection populates */
 		};
 	},
 
 	render: function render() {
-		var jackpot = 500;
-		return _react2.default.createElement('div', { className: 'articlesView' }, _react2.default.createElement(Header, null), _react2.default.createElement(NewsContainer, { articleColl: this.state.coll }));
+		return _react2.default.createElement('div', { className: 'articlesView' }, _react2.default.createElement(Header, null), '     ', _react2.default.createElement(NewsContainer, { articleColl: this.state.coll }));
 	}
-});
+}); // Loading in the framework for React
 
 var Header = _react2.default.createClass({
 	displayName: 'Header',
+	// the actual header component to be rendered in the
+	// larger component above containing sites title and
+	// the input bar
 
 	render: function render() {
 		return _react2.default.createElement('div', { className: 'headerContainer' }, _react2.default.createElement('h1', null, 'This Just In'), _react2.default.createElement('input', null));
@@ -33277,10 +33299,15 @@ var Header = _react2.default.createClass({
 
 var NewsContainer = _react2.default.createClass({
 	displayName: 'NewsContainer',
+	//this is where the articles are being
+	// rendered with article data being passed
+	// through by the Article Collection in Backbone
+	//article models
 
 	_getJsxArray: function _getJsxArray(articlesArray) {
 		// articlesArray.forEach(function())
-		var jsxArray = [];
+		var jsxArray = []; // start with an empty array so that we can push
+		// article models from the article components
 
 		articlesArray.forEach(function (model) {
 			jsxArray.push(_react2.default.createElement(Article, { articleModel: model }));
@@ -33297,27 +33324,34 @@ var NewsContainer = _react2.default.createClass({
 	},
 
 	render: function render() {
+		/*  */
 		var imgStyle = {
 			display: 'block'
 		};
 		if (this.props.articleColl.models.length > 0) {
 			imgStyle.display = 'none';
 		}
-		return _react2.default.createElement('div', { className: 'newsContainer' }, _react2.default.createElement('img', { style: imgStyle, src: 'http://www.owlhatworld.com/wp-content/uploads/2015/12/38.gif' }), this._getJsxArray(this.props.articleColl.models));
+		return _react2.default.createElement('div', { className: 'newsContainer' }, _react2.default.createElement('img', { style: imgStyle, src: 'http://www.owlhatworld.com/wp-content/uploads/2015/12/38.gif' }), this._getJsxArray(this.props.articleColl.models), ' ');
 	}
 });
 
 var Article = _react2.default.createClass({
 	displayName: 'Article',
+	/* creating the React component to handle
+ the data for an individual article */
 
 	_toggleParagraph: function _toggleParagraph() {
+		/* checks the current state to see if the <p> is showing */
 		if (this.state.pDisplay === 'none') {
-			this.setState({
+			// if it is not…
+			this.setState({ // we set the state so that the paragraph is showing which
+				// causes the component to re-render assigning a different
+				// style proper to the paragraph
 				pDisplay: 'block',
 				buttonState: '-'
 			});
 		} else {
-			this.setState({
+			this.setState({ // and vice versa
 				pDisplay: 'none',
 				buttonState: '+'
 			});
@@ -33325,10 +33359,12 @@ var Article = _react2.default.createClass({
 	},
 
 	_goToDetailView: function _goToDetailView() {
-		location.hash = 'detail/' + this.props.articleModel.get('_id');
-	},
+		// changing the hash which will fire off the Backbone Router
+		location.hash = 'detail/' + this.props.articleModel.get('_id'); //read the ID off the Backbone Model that lives
+	}, // on props
 
 	getInitialState: function getInitialState() {
+		//the initial state for the buttons and p tags
 		// return the object that will be the component's initial state
 		return {
 			pDisplay: 'none',
@@ -33338,7 +33374,8 @@ var Article = _react2.default.createClass({
 
 	render: function render() {
 		console.log(this);
-		var styleObj = {
+		var styleObj = { //a kind of state based obj for better readability and avoiding nested
+			// brackets in our render return
 			display: this.state.pDisplay
 		};
 
@@ -33346,7 +33383,9 @@ var Article = _react2.default.createClass({
 	}
 });
 
-exports.default = ArticlesView;
+exports.default = ArticlesView; // we export a variable name declared in the file so that it can be imported elswhere
+// since ArticlesView is the top level component and it renders everything else
+// it is the only name we need to export
 
 },{"react":169,"react-dom":31}],172:[function(require,module,exports){
 'use strict';
@@ -33369,6 +33408,8 @@ function _interopRequireDefault(obj) {
 
 var DetailView = _react2.default.createClass({
 	displayName: 'DetailView',
+	//this will render out once it's called by a clicking
+	// the article from the article view and changing the hash
 
 	render: function render() {
 		console.log(this.props.notKey.attributes);
@@ -33450,6 +33491,11 @@ var app = function app() {
 					"apikey": newsModel._key
 				}
 			}).then(function () {
+				/* this is setting up the DetaiView to be rendered after Backbone
+    gathers the data for the item being being targetted for detail 
+    expainsion. Assigns newsModel to the DetailView.props.notKey. 
+    it then mounts it on the dom node passed through as the second 
+    argument*/
 				_reactDom2.default.render(_react2.default.createElement(_DetailView2.default, { notKey: newsModel }), document.querySelector('.container'));
 			});
 		},
@@ -33464,7 +33510,7 @@ var app = function app() {
 				data: {
 					apikey: homeCollection._key
 				}
-			});
+			}); //no Then function but will render the data after the Backbone triggers this function
 			_reactDom2.default.render(_react2.default.createElement(_ArticlesView2.default, { articleColl: homeCollection }), document.querySelector('.container'));
 			// articlesView.props.popop = homeCollection
 		},

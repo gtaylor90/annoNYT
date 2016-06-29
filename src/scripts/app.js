@@ -50,7 +50,11 @@ const app = function() {
 					fq: "_id:" + id,
 					"apikey": newsModel._key
 				}
-			}).then(function(){
+			}).then(function(){   /* this is setting up the DetaiView to be rendered after Backbone
+									gathers the data for the item being being targetted for detail 
+									expainsion. Assigns newsModel to the DetailView.props.notKey. 
+									it then mounts it on the dom node passed through as the second 
+									argument*/
 				ReactDOM.render(<DetailView notKey={newsModel} />, document.querySelector('.container'))
 
 			})
@@ -66,7 +70,7 @@ const app = function() {
 				data: {
 					apikey: homeCollection._key
 				}
-			})
+			})  //no Then function but will render the data after the Backbone triggers this function
 			ReactDOM.render(<ArticlesView articleColl={homeCollection} />, document.querySelector('.container'))				
 			// articlesView.props.popop = homeCollection
 		},

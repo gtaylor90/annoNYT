@@ -1,7 +1,8 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 
-var DetailView = React.createClass({
+var DetailView = React.createClass({	//this will render out once it's called by a clicking
+										// the article from the article view and changing the hash
 
 	render: function() {
 		console.log(this.props.notKey.attributes)
