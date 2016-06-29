@@ -33206,6 +33206,181 @@ module.exports = require('./lib/React');
 },{}],171:[function(require,module,exports){
 'use strict';
 
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var ArticlesView = _react2.default.createClass({
+	displayName: 'ArticlesView',
+
+	componentWillMount: function componentWillMount() {
+		var _this = this;
+
+		// 3 context fixes
+
+		// // stable version of "this"
+		// var thisComponent = this
+		// this.props.articleColl.on('sync',function() {
+		// 	thisComponent.setState({
+		// 		coll: thisComponent.props.articleColl
+		// 	})
+		// })
+
+		// // .bind(contextObj), which returns a new function with no
+		// // "this" context, using the input object to replace "this"
+		// this.props.articleColl.on('sync',function() {
+		// 	this.setState({
+		// 		coll: this.props.articleColl
+		// 	})
+		// }.bind(this))
+
+		// fat-arrow function. fat-arrow functions are nice to use
+		// as callbacks because they have no "this" context
+		this.props.articleColl.on('sync', function () {
+			_this.setState({
+				coll: _this.props.articleColl
+			});
+		});
+	},
+
+	getInitialState: function getInitialState() {
+		return {
+			coll: this.props.articleColl
+		};
+	},
+
+	render: function render() {
+		var jackpot = 500;
+		return _react2.default.createElement('div', { className: 'articlesView' }, _react2.default.createElement(Header, null), _react2.default.createElement(NewsContainer, { articleColl: this.state.coll }));
+	}
+});
+
+var Header = _react2.default.createClass({
+	displayName: 'Header',
+
+	render: function render() {
+		return _react2.default.createElement('div', { className: 'headerContainer' }, _react2.default.createElement('h1', null, 'This Just In'), _react2.default.createElement('input', null));
+	}
+});
+
+var NewsContainer = _react2.default.createClass({
+	displayName: 'NewsContainer',
+
+	_getJsxArray: function _getJsxArray(articlesArray) {
+		// articlesArray.forEach(function())
+		var jsxArray = [];
+
+		articlesArray.forEach(function (model) {
+			jsxArray.push(_react2.default.createElement(Article, { articleModel: model }));
+		});
+		// for (var i = 0; i < articlesArray.length; i ++) {
+		// 	var model = articlesArray[i]
+		// 	// push onto my jsxArray an Article component that has this
+		// 	// model on its props
+		// 	jsxArray.push(<Article articleModel={model} />)
+
+		// }
+
+		return jsxArray;
+	},
+
+	render: function render() {
+		var imgStyle = {
+			display: 'block'
+		};
+		if (this.props.articleColl.models.length > 0) {
+			imgStyle.display = 'none';
+		}
+		return _react2.default.createElement('div', { className: 'newsContainer' }, _react2.default.createElement('img', { style: imgStyle, src: 'http://www.owlhatworld.com/wp-content/uploads/2015/12/38.gif' }), this._getJsxArray(this.props.articleColl.models));
+	}
+});
+
+var Article = _react2.default.createClass({
+	displayName: 'Article',
+
+	_toggleParagraph: function _toggleParagraph() {
+		if (this.state.pDisplay === 'none') {
+			this.setState({
+				pDisplay: 'block',
+				buttonState: '-'
+			});
+		} else {
+			this.setState({
+				pDisplay: 'none',
+				buttonState: '+'
+			});
+		}
+	},
+
+	_goToDetailView: function _goToDetailView() {
+		location.hash = 'detail/' + this.props.articleModel.get('_id');
+	},
+
+	getInitialState: function getInitialState() {
+		// return the object that will be the component's initial state
+		return {
+			pDisplay: 'none',
+			buttonState: '+'
+		};
+	},
+
+	render: function render() {
+		console.log(this);
+		var styleObj = {
+			display: this.state.pDisplay
+		};
+
+		return _react2.default.createElement('div', { className: 'articleContainer' }, _react2.default.createElement('h2', null, this.props.articleModel.get('headline').main), _react2.default.createElement('button', { onClick: this._goToDetailView }, 'full page'), _react2.default.createElement('p', { style: styleObj }, this.props.articleModel.get('lead_paragraph')), _react2.default.createElement('button', { onClick: this._toggleParagraph, className: 'expand' }, this.state.buttonState));
+	}
+});
+
+exports.default = ArticlesView;
+
+},{"react":169,"react-dom":31}],172:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
+function _interopRequireDefault(obj) {
+	return obj && obj.__esModule ? obj : { default: obj };
+}
+
+var DetailView = _react2.default.createClass({
+	displayName: 'DetailView',
+
+	render: function render() {
+		console.log(this.props.notKey.attributes);
+		return _react2.default.createElement('div', { className: 'detailView' }, _react2.default.createElement('h1', null, ' WELCOME TO DETAIL VIEWH1J!H!! '), _react2.default.createElement('p', null, ' ', this.props.notKey.get('snippet'), ' '));
+	}
+});
+
+exports.default = DetailView;
+
+},{"react":169,"react-dom":31}],173:[function(require,module,exports){
+'use strict';
+
 var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
@@ -33218,63 +33393,19 @@ var _backbone = require('backbone');
 
 var _backbone2 = _interopRequireDefault(_backbone);
 
+var _ArticlesView = require('./ArticlesView');
+
+var _ArticlesView2 = _interopRequireDefault(_ArticlesView);
+
+var _DetailView = require('./DetailView');
+
+var _DetailView2 = _interopRequireDefault(_DetailView);
+
 function _interopRequireDefault(obj) {
 	return obj && obj.__esModule ? obj : { default: obj };
 }
 
 var app = function app() {
-
-	var ArticlesView = _react2.default.createClass({
-		displayName: 'ArticlesView',
-
-		render: function render() {
-			return _react2.default.createElement('div', { className: 'articlesView' }, _react2.default.createElement(Header, null), _react2.default.createElement(NewsContainer, { articleColl: this.props.articleColl }));
-		}
-	});
-
-	var Header = _react2.default.createClass({
-		displayName: 'Header',
-
-		render: function render() {
-			return _react2.default.createElement('div', { className: 'headerContainer' }, _react2.default.createElement('h1', null, 'This Just In'), _react2.default.createElement('input', null));
-		}
-	});
-
-	var NewsContainer = _react2.default.createClass({
-		displayName: 'NewsContainer',
-
-		_getJsxArray: function _getJsxArray(articlesArray) {
-			// articlesArray.forEach(function())
-			var jsxArray = [];
-
-			articlesArray.forEach(function (model) {
-				jsxArray.push(_react2.default.createElement(Article, { articleModel: model }));
-			});
-			// for (var i = 0; i < articlesArray.length; i ++) {
-			// 	var model = articlesArray[i]
-			// 	// push onto my jsxArray an Article component that has this
-			// 	// model on its props
-			// 	jsxArray.push(<Article articleModel={model} />)
-
-			// }
-
-			return jsxArray;
-		},
-
-		render: function render() {
-			return _react2.default.createElement('div', { className: 'newsContainer' }, this._getJsxArray(this.props.articleColl.models));
-		}
-	});
-
-	var Article = _react2.default.createClass({
-		displayName: 'Article',
-
-		render: function render() {
-			console.log('article data...');
-			console.log(this.props);
-			return _react2.default.createElement('div', { className: 'articleContainer' }, _react2.default.createElement('h2', null, this.props.articleModel.get('headline').main));
-		}
-	});
 
 	var NewsModel = _backbone2.default.Model.extend({
 		url: 'https://api.nytimes.com/svc/search/v2/articlesearch.json',
@@ -33318,6 +33449,8 @@ var app = function app() {
 					fq: "_id:" + id,
 					"apikey": newsModel._key
 				}
+			}).then(function () {
+				_reactDom2.default.render(_react2.default.createElement(_DetailView2.default, { notKey: newsModel }), document.querySelector('.container'));
 			});
 		},
 
@@ -33331,9 +33464,9 @@ var app = function app() {
 				data: {
 					apikey: homeCollection._key
 				}
-			}).then(function () {
-				_reactDom2.default.render(_react2.default.createElement(ArticlesView, { articleColl: homeCollection }), document.querySelector('.container'));
 			});
+			_reactDom2.default.render(_react2.default.createElement(_ArticlesView2.default, { articleColl: homeCollection }), document.querySelector('.container'));
+			// articlesView.props.popop = homeCollection
 		},
 
 		initialize: function initialize() {
@@ -33346,4 +33479,4 @@ var app = function app() {
 
 app();
 
-},{"backbone":1,"react":169,"react-dom":31}]},{},[171]);
+},{"./ArticlesView":171,"./DetailView":172,"backbone":1,"react":169,"react-dom":31}]},{},[173]);

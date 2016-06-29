@@ -22,7 +22,56 @@ input:focus {
 		font-size: 96px;
 		text-align: center;
 		color: fuchsia;
+		margin-bottom: 2%;
+	}
+}
+
+.newsContainer {
+	width: 70%;
+	margin: 5% auto;
+
+	img {
+		width: 350px;
+		margin: 0 auto;
 	}
 
+	.articleContainer {
+		margin-bottom: 5%;
+	}
 
+	h2,button {
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+	h2 {
+		width: 80%;
+		margin-bottom: 0;
+	}
+
+	button,p {
+		font-size: 24px;
+	}
+
+	button {
+		padding: 2%;
+		border: #222;
+		outline: none;
+		background: tomato;
+		border-radius: 6%;
+		margin-left: 3%;
+		color: white;
+		cursor: pointer;
+	}
+
+	button.expand {
+		background: cadetblue;
+		display: block;
+		width: 40px;
+		margin: 0 auto;
+		height: 40px;
+		font-size: 24px;
+		line-height: 24px;
+		padding: 0;	
+	}
 }
